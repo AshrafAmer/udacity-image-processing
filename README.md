@@ -36,7 +36,7 @@ Try it!! We are happy to hear your feedback or any kind of new features.
 <br>
 4- copy .env-example to .env file.
 <br>
-5- run ``` npm serve ``` to test and run the server once.
+5- run ``` npm run serve ``` to test and run the server once.
 <br>
 6- go to ``` http://localhost:3000/images?filename=xxx&width=xxx&height=xxx ```
 <br>
