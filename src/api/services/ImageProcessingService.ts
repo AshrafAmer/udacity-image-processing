@@ -2,6 +2,7 @@ import fs from 'fs';
 import sharp from 'sharp';
 import path from 'path';
 import { ImageProcessingOptions } from './../types/ImageProcessingOptions';
+import { ValidateError } from '../errors/ValidateError';
 
 export class ImageProcessingService {
     public static async imageSharp(
@@ -12,9 +13,9 @@ export class ImageProcessingService {
                 .resize(options.width, options.height)
                 .toFormat('webp')
                 .toFile(options.outputFile);
-        } catch (err) {
+        } catch (err: unknown) {
             console.log(`An error occurred during processing: ${err}`);
-            throw new Error('An error occurred during processing');
+            throw new ValidateError('An error occurred during processing');
         }
     }
 
@@ -50,5 +51,15 @@ export class ImageProcessingService {
             (imageName: string): string => imageName.split('.')[0]
         );
         return namesList;
+    }
+
+    public static async checkOutputThumbExistance(): Promise<void> {
+        const outputFolder = path.resolve(
+            __dirname,
+            './../../../assets/images/thumb'
+        );
+        if (!fs.existsSync(outputFolder)) {
+            fs.mkdirSync(outputFolder);
+        }
     }
 }

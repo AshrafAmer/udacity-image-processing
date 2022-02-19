@@ -1,26 +1,27 @@
 import express from 'express';
+import { ValidateError } from '../errors/ValidateError';
 import { APIQuery } from '../types/APIQuery';
 import { ImageProcessingService } from './ImageProcessingService';
 
 export class ImageProcessingValidate {
     public static validate(query: APIQuery): void {
         if (!query.filename || !query.filename.length) {
-            throw new Error('Filename is required');
+            throw new ValidateError('Filename is required');
         }
 
-        if (!query.width || !query.width.length) {
-            throw new Error('Width is required');
+        if (!query.width || isNaN(parseInt(query.width))) {
+            throw new ValidateError('Valid width is required');
         }
 
-        if (!query.height || !query.height.length) {
-            throw new Error('Height is required');
+        if (!query.height || isNaN(parseInt(query.height))) {
+            throw new ValidateError('Valid height is required');
         }
     }
 
     public static async validImageName(imageName: string): Promise<void> {
         const images = await ImageProcessingService.imagesList();
         if (!images.includes(imageName)) {
-            throw new Error('image name not valid');
+            throw new ValidateError('image name not valid');
         }
     }
 
